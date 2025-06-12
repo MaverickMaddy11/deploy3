@@ -13,9 +13,14 @@ jobs:
     steps:
       - name: Checkout the code
         uses: actions/checkout@v2
+
+      - name: Execute remote commands over SSH
+        uses: appleboy/ssh-action@master
         with:
           host: 13.53.44.32
           username: ubuntu
-          password: ${{secrets.PRIVATE_SSH_KEY}}
+          key: ${{ secrets.PRIVATE_SSH_KEY }}
           port: 22
-          script: whoami
+          script: |
+            whoami
+            echo "This is running on EC2"
