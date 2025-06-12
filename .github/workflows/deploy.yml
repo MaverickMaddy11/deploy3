@@ -22,7 +22,7 @@ jobs:
           key: ${{ secrets.PRIVATE_SSH_KEY }}
           port: 22
           script: |
-            cd /home/ubuntu/my-next-app   # Replace with your app path
+            cd /home/ubuntu/projects/myproject3/deploy3   # Replace with your app path
             git pull origin main
             npm install
             npm run build
