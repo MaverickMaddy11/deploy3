@@ -13,3 +13,9 @@ jobs:
     steps:
       - name: Checkout the code
         uses: actions/checkout@v2
+        with:
+          host: 13.53.44.32
+          username: ubuntu
+          password: ${{secrets.PRIVATE_SSH_KEY}}
+          port: 22
+          script: whoami
