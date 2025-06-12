@@ -1,29 +1,32 @@
-name: Deploy to EC2
+- name: Execute remote commands over SSH
+  uses: appleboy/ssh-action@master
+  with:
+    host: 13.53.44.32
+    username: ubuntu
+    key: ${{ secrets.PRIVATE_SSH_KEY }}
+    port: 22
+    script: |
+      # Install Node.js (v18 LTS as an example)
+      curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+      sudo apt-get install -y nodejs
 
-on:
-  push:
-    branches:
-      - main
+      # Install PM2 globally
+      sudo npm install -g pm2
 
-jobs:
-  deploy:
-    name: Push to EC2
-    runs-on: ubuntu-latest
+      # Navigate to project folder
+      cd /home/ubuntu/projects/myproject3/deploy3
 
-    steps:
-      - name: Checkout the code
-        uses: actions/checkout@v2
+      # Pull changes (optional if already pulled)
+      git pull origin main
 
-      - name: Execute remote commands over SSH
-        uses: appleboy/ssh-action@master
-        with:
-          host: 13.53.44.32
-          username: ubuntu
-          key: ${{ secrets.PRIVATE_SSH_KEY }}
-          port: 22
-          script: |
-            cd /home/ubuntu/projects/myproject3/deploy3   # Replace with your app path
-            git pull origin main
-            npm install
-            npm run build
-            pm2 restart next-app || pm2 start npm --name "next-app" -- start
+      # Install dependencies
+      npm install
+
+      # Build the project
+      npm run build
+
+      # Start or restart app with PM2
+      pm2 restart next-app || pm2 start npm --name "next-app" -- start
+
+      # Save PM2 state
+      pm2 save
