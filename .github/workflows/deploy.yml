@@ -22,5 +22,8 @@ jobs:
           key: ${{ secrets.PRIVATE_SSH_KEY }}
           port: 22
           script: |
-            whoami
-            echo "This is running on EC2"
+            cd /home/ubuntu/my-next-app   # Replace with your app path
+            git pull origin main
+            npm install
+            npm run build
+            pm2 restart next-app || pm2 start npm --name "next-app" -- start
